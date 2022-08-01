@@ -1,54 +1,25 @@
 package com.tweetapp.domain;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("tweets")
-public class Tweets {
+@Document(collection = "likes")
+public class Likes {
 
 	@Id
 	private String id;
-
-	@Indexed
-	private String tweetMessage;
-
+	@DBRef
+	private Tweets tweet;
 	@DBRef
 	private Users username;
-
 	private Date createdAt;
-	private String createdBy;
 	private Date modifiedAt;
+	private String createdBy;
 	private String modifiedBy;
 	private Character isActive;
-
-	@DBRef
-	private Set<Likes> likes = new HashSet<>();
-	
-	@DBRef
-	private Set<Tweets> reTweets = new HashSet<>();
-
-	public Tweets() {
-		super();
-	}
-
-	public Tweets(String id, String tweetMessage, Users username) {
-		super();
-		this.id = id;
-		this.tweetMessage = tweetMessage;
-		this.username = username;
-	}
-
-	public Tweets(String tweetMessage, Users username) {
-		super();
-		this.tweetMessage = tweetMessage;
-		this.username = username;
-	}
 
 	/**
 	 * @return the id
@@ -65,17 +36,17 @@ public class Tweets {
 	}
 
 	/**
-	 * @return the tweetMessage
+	 * @return the tweet
 	 */
-	public String getTweetMessage() {
-		return tweetMessage;
+	public Tweets getTweet() {
+		return tweet;
 	}
 
 	/**
-	 * @param tweetMessage the tweetMessage to set
+	 * @param tweet the tweet to set
 	 */
-	public void setTweetMessage(String tweetMessage) {
-		this.tweetMessage = tweetMessage;
+	public void setTweet(Tweets tweet) {
+		this.tweet = tweet;
 	}
 
 	/**
@@ -107,20 +78,6 @@ public class Tweets {
 	}
 
 	/**
-	 * @return the createdBy
-	 */
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	/**
-	 * @param createdBy the createdBy to set
-	 */
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	/**
 	 * @return the modifiedAt
 	 */
 	public Date getModifiedAt() {
@@ -135,6 +92,20 @@ public class Tweets {
 	}
 
 	/**
+	 * @return the createdBy
+	 */
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	/**
+	 * @param createdBy the createdBy to set
+	 */
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	/**
 	 * @return the modifiedBy
 	 */
 	public String getModifiedBy() {
@@ -146,20 +117,6 @@ public class Tweets {
 	 */
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
-	}
-
-	/**
-	 * @return the likes
-	 */
-	public Set<Likes> getLikes() {
-		return likes;
-	}
-
-	/**
-	 * @param likes the likes to set
-	 */
-	public void setLikes(Set<Likes> likes) {
-		this.likes = likes;
 	}
 
 	/**

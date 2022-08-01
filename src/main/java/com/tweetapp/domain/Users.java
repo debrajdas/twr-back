@@ -1,29 +1,24 @@
 package com.tweetapp.domain;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.validation.constraints.NotNull;
-
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Document("users")
 public class Users {
 
 	@Id
-	private ObjectId id;
+	private String id;
 
-	@NotNull(message = "FirstName can not be null")
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String username;
 
-	@Indexed
-	private String loginId;
 	private String password;
 	private String contactNumber;
 
@@ -31,22 +26,52 @@ public class Users {
 	private String createdBy;
 	private Date modifiedAt;
 	private String mdifiedBy;
+	private Character isActive;
 
-	@DocumentReference
-	private List<Tweets> tweetId;
+	@DBRef
+	private Set<Role> roles = new HashSet<>();
+	@DBRef
+	private Set<Tweets> tweets = new HashSet<>();
+	@DBRef
+	private Set<Likes> likes = new HashSet<>();
+
+	public Users(String firstName, String lastName, String email, String username, String password,
+			String contactNumber) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.contactNumber = contactNumber;
+	}
 
 	/**
 	 * @return the id
 	 */
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
@@ -89,20 +114,6 @@ public class Users {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * @return the loginId
-	 */
-	public String getLoginId() {
-		return loginId;
-	}
-
-	/**
-	 * @param loginId the loginId to set
-	 */
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
 	}
 
 	/**
@@ -190,17 +201,59 @@ public class Users {
 	}
 
 	/**
-	 * @return the tweetId
+	 * @return the roles
 	 */
-	public List<Tweets> getTweetId() {
-		return tweetId;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
 	/**
-	 * @param tweetId the tweetId to set
+	 * @param roles the roles to set
 	 */
-	public void setTweetId(List<Tweets> tweetId) {
-		this.tweetId = tweetId;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * @return the tweets
+	 */
+	public Set<Tweets> getTweets() {
+		return tweets;
+	}
+
+	/**
+	 * @param tweets the tweets to set
+	 */
+	public void setTweets(Set<Tweets> tweets) {
+		this.tweets = tweets;
+	}
+
+	/**
+	 * @return the likes
+	 */
+	public Set<Likes> getLikes() {
+		return likes;
+	}
+
+	/**
+	 * @param likes the likes to set
+	 */
+	public void setLikes(Set<Likes> likes) {
+		this.likes = likes;
+	}
+
+	/**
+	 * @return the isActive
+	 */
+	public Character getIsActive() {
+		return isActive;
+	}
+
+	/**
+	 * @param isActive the isActive to set
+	 */
+	public void setIsActive(Character isActive) {
+		this.isActive = isActive;
 	}
 
 }
