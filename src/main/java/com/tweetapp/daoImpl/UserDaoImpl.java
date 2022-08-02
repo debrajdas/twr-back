@@ -46,11 +46,14 @@ public class UserDaoImpl implements UsersDao {
 
 	@Override
 	public Boolean isUserAdmin(String username) {
-		Role adminRole = rolesRepository.findByName(ERole.ROLE_ADMIN).get();
-		List<Role> result = getUserByUsername(username).getRoles().stream()
-				.filter(ur -> ur.getId().equals(adminRole.getId())).collect(Collectors.toList());
-		if (!result.isEmpty()) {
-			return true;
+		if (!rolesRepository.findByName(ERole.ROLE_ADMIN).isPresent()) {
+			Role adminRole = rolesRepository.findByName(ERole.ROLE_ADMIN).get();
+
+			List<Role> result = getUserByUsername(username).getRoles().stream()
+					.filter(ur -> ur.getId().equals(adminRole.getId())).collect(Collectors.toList());
+			if (!result.isEmpty()) {
+				return true;
+			}
 		}
 		return false;
 	}

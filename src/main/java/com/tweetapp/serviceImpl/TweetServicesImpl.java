@@ -147,4 +147,50 @@ public class TweetServicesImpl implements TweetServices {
 			return false;
 		}
 	}
+
+	@Override
+	public TweetResponseList getAllTweetsByUsername(String username) {
+		Users user = usersDao.getUserByUsername(username);
+		TweetResponseList tweetList = new TweetResponseList();
+		List<TweetResponse> tweets = new ArrayList<>();
+		Set<Tweets> userTweets = user.getTweets();
+		userTweets.forEach(tweet -> {
+			TweetResponse tr = new TweetResponse();
+			tr.setId(tweet.getId());
+			tr.setTweetMessage(tweet.getTweetMessage());
+			tr.setUsername(tweet.getUsername().getUsername());
+			tr.setCreatedBy(tweet.getCreatedBy());
+			tr.setCtearedAt(tweet.getCreatedAt());
+			if (tweet.getModifiedBy() != null) {
+				tr.setModifiedBy(tweet.getModifiedBy());
+			}
+			if (tweet.getModifiedAt() != null) {
+				tr.setModifiedAt(tweet.getModifiedAt());
+			}
+			tweets.add(tr);
+		});
+		tweetList.setTweets(tweets);
+		return tweetList;
+	}
+
+	@Override
+	public void replyToTweet(TweetRequest tweetRequest, String tweetId) {
+		LOG.info("inside replyToTweet()");
+		Users user = usersDao.getUserByUsername(tweetRequest.getUsername());
+		Tweets tweet = tweetsDao.findTweetById(tweetId);
+		Tweets reTweet = new Tweets(tweetRequest.getTweetString(), user);
+		reTweet.setCreatedBy(tweetRequest.getUsername());
+		reTweet.setCreatedAt(new Date());
+		reTweet = tweetsDao.save(reTweet);
+		if (reTweet.getId() != null) {
+			Set<Tweets> tweets = user.getTweets();
+			Set<Tweets> tweetSet = tweet.getReTweets();
+			tweets.add(reTweet);
+			tweetSet.add(reTweet);
+			user.setTweets(tweets);
+			tweet.setReTweets(tweetSet);
+			userRepository.save(user);
+			tweetsDao.save(tweet);
+		}
+	}
 }

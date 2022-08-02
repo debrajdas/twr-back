@@ -42,6 +42,12 @@ public class TweetsController {
 		return tweetsFacade.getAllTweets();
 	}
 
+	@GetMapping(path = "/{username}")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MODERATOR')")
+	public ResponseEntity<?> getAllTweetsByUsername(@PathVariable(required = true) String username) {
+		return ResponseEntity.ok(tweetsFacade.getAllTweetsByUsername(username));
+	}
+
 	@PostMapping(path = "/{username}/add")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> createTweet(@PathVariable(required = true) String username,
@@ -84,6 +90,19 @@ public class TweetsController {
 			return ResponseEntity.ok(new MessageResponse("Liked"));
 		}
 		return ResponseEntity.ok(new MessageResponse("Not Liked"));
+	}
+
+	@PostMapping(path = "/{username}/reply/{id}")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<?> replyToTweet(@PathVariable(required = true) String username,
+			@PathVariable(required = true) String id, @RequestBody TweetRequest tweetRequest) {
+		if (currentUserName().equals(username)) {
+			tweetRequest.setUsername(username);
+			tweetsFacade.replyToTweet(tweetRequest, id);
+			return ResponseEntity.ok(new MessageResponse("Tweet created successfully!"));
+		} else {
+			return ResponseEntity.ok(new MessageResponse("Tweet can not be created!"));
+		}
 	}
 
 }

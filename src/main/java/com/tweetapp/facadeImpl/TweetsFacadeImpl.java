@@ -38,4 +38,14 @@ public class TweetsFacadeImpl implements TweetsFacade {
 	public Boolean likeTweet(String username, String id) {
 		return tweetServices.likeTweet(username, id);
 	}
+
+	@Override
+	public TweetResponseList getAllTweetsByUsername(String username) {
+		return tweetServices.getAllTweetsByUsername(username);
+	}
+
+	@Override
+	public void replyToTweet(TweetRequest tweetRequest, String tweetId) {
+		tweetServices.replyToTweet(tweetRequest, tweetId);
+	}
 }

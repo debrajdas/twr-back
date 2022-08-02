@@ -29,7 +29,7 @@ public class Tweets {
 
 	@DBRef
 	private Set<Likes> likes = new HashSet<>();
-	
+
 	@DBRef
 	private Set<Tweets> reTweets = new HashSet<>();
 
@@ -174,6 +174,20 @@ public class Tweets {
 	 */
 	public void setIsActive(Character isActive) {
 		this.isActive = isActive;
+	}
+
+	/**
+	 * @return the reTweets
+	 */
+	public Set<Tweets> getReTweets() {
+		return reTweets;
+	}
+
+	/**
+	 * @param reTweets the reTweets to set
+	 */
+	public void setReTweets(Set<Tweets> reTweets) {
+		this.reTweets = reTweets;
 	}
 
 }

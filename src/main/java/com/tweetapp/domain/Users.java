@@ -46,6 +46,17 @@ public class Users {
 		this.contactNumber = contactNumber;
 	}
 
+	public Users(String id, String username, String password) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+	}
+
+	public Users() {
+		super();
+	}
+
 	/**
 	 * @return the id
 	 */

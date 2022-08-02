@@ -14,4 +14,8 @@ public interface TweetServices {
 	public Boolean deleteTweet(String username, String id);
 
 	public Boolean likeTweet(String username, String id);
+
+	public TweetResponseList getAllTweetsByUsername(String username);
+
+	public void replyToTweet(TweetRequest tweetRequest, String tweetId);
 }

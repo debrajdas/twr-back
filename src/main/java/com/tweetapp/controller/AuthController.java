@@ -16,11 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tweetapp.dao.UsersDao;
 import com.tweetapp.domain.ERole;
 import com.tweetapp.domain.Role;
 import com.tweetapp.domain.Users;
@@ -32,6 +34,8 @@ import com.tweetapp.repository.RolesRepository;
 import com.tweetapp.repository.UserRepository;
 import com.tweetapp.security.jwt.JwtUtils;
 import com.tweetapp.security.services.UserDetailsImpl;
+import com.tweetapp.util.TweetAppConstants;
+import com.tweetapp.util.TweetAppUtil;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -46,6 +50,9 @@ public class AuthController {
 
 	@Autowired
 	RolesRepository roleRepository;
+
+	@Autowired
+	UsersDao userDao;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -109,4 +116,20 @@ public class AuthController {
 		userRepository.save(user);
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
+
+	@GetMapping("/{username}/forgot")
+	public ResponseEntity<?> forgotPassword(@PathVariable(required = true) String username) {
+		Users user = userDao.getUserByUsername(username);
+		if (user == null) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: User does not exists!"));
+		} else {
+			String randomPassword = "temp"
+					+ TweetAppUtil.generateRandomString(TweetAppConstants.RANDOM_PASSWORD_LEFT_LIMIT,
+							TweetAppConstants.RANDOM_PASSWORD_RIGHT_LIMIT, TweetAppConstants.RANDOM_PASSWORD_LENGTH);
+			user.setPassword(encoder.encode(randomPassword));
+			userRepository.save(user);
+			return ResponseEntity.ok(new MessageResponse(randomPassword));
+		}
+	}
+
 }
