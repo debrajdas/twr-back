@@ -1,3 +1,5 @@
+
+
 package com.tweetapp.controller;
 
 import org.slf4j.Logger;
@@ -22,7 +24,7 @@ import com.tweetapp.payload.request.TweetRequest;
 import com.tweetapp.payload.response.MessageResponse;
 import com.tweetapp.payload.response.TweetResponseList;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/")
 public class TweetsController {

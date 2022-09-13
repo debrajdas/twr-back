@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +38,7 @@ import com.tweetapp.security.services.UserDetailsImpl;
 import com.tweetapp.util.TweetAppConstants;
 import com.tweetapp.util.TweetAppUtil;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/")
 public class AuthController {
@@ -60,7 +61,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));

@@ -1,6 +1,13 @@
 package com.tweetapp.payload.response;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.tweetapp.domain.Likes;
+import com.tweetapp.domain.Tweets;
 
 public class TweetResponse {
 	private String id;
@@ -10,6 +17,29 @@ public class TweetResponse {
 	private String createdBy;
 	private Date modifiedAt;
 	private String modifiedBy;
+	private Set<Likes> likes ;
+    private List<String> like;
+    private Set<CommentResponse> comment;
+    private String firstName;
+    private String lastName;
+
+	
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	/**
 	 * @return the id
@@ -108,5 +138,30 @@ public class TweetResponse {
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
+
+	public Set<Likes> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<Likes> likes) {
+		this.likes = likes;
+	}
+
+	public List<String> getLike() {
+		return like;
+	}
+
+	public void setLike(List<String> like) {
+		this.like = like;
+	}
+
+	public Set<CommentResponse> getComment() {
+		return comment;
+	}
+	public void setComment(Set<CommentResponse> comment) {
+		this.comment = comment;
+	}
+	
+	
 
 }

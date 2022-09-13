@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.tweetapp.domain.Users;
 
-public interface UserRepository extends MongoRepository<Users, ObjectId> {
+public interface UserRepository extends MongoRepository<Users, String> {
 
 	Optional<Users> findByUsername(String username);
 

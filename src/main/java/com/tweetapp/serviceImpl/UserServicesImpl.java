@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.tweetapp.dao.UsersDao;
 import com.tweetapp.domain.Users;
@@ -14,7 +15,7 @@ import com.tweetapp.payload.response.UsersResponse;
 import com.tweetapp.payload.response.UsersResponseList;
 import com.tweetapp.service.UserServices;
 
-@Component
+@Service
 public class UserServicesImpl implements UserServices {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserServicesImpl.class);
@@ -25,6 +26,8 @@ public class UserServicesImpl implements UserServices {
 	@Override
 	public UsersResponseList getAllUsers() {
 		List<Users> users = userDao.getAllUsers();
+		System.out.println(users.size());
+		for(Users u:users) System.out.println(u.getUsername());
 		UsersResponseList usersResponseList = new UsersResponseList();
 		List<UsersResponse> usersResponses = new ArrayList<>();
 		users.forEach(user -> {
@@ -33,9 +36,7 @@ public class UserServicesImpl implements UserServices {
 			usersResponse.setName(user.getFirstName() + " " + user.getLastName());
 			usersResponse.setUsername(user.getUsername());
 			usersResponses.add(usersResponse);
-			user.getTweets().forEach(tweet -> {
-				LOG.info(tweet.getTweetMessage());
-			});
+			
 		});
 		usersResponseList.setUsersList(usersResponses);
 		return usersResponseList;

@@ -9,6 +9,10 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
+
 @Document("tweets")
 public class Tweets {
 
@@ -26,12 +30,13 @@ public class Tweets {
 	private Date modifiedAt;
 	private String modifiedBy;
 	private Character isActive;
-
 	@DBRef
 	private Set<Likes> likes = new HashSet<>();
 
+	
+
 	@DBRef
-	private Set<Tweets> reTweets = new HashSet<>();
+	private Set<Comments> reTweets = new HashSet<>();
 
 	public Tweets() {
 		super();
@@ -179,14 +184,14 @@ public class Tweets {
 	/**
 	 * @return the reTweets
 	 */
-	public Set<Tweets> getReTweets() {
+	public Set<Comments> getReTweets() {
 		return reTweets;
 	}
 
 	/**
 	 * @param reTweets the reTweets to set
 	 */
-	public void setReTweets(Set<Tweets> reTweets) {
+	public void setReTweets(Set<Comments> reTweets) {
 		this.reTweets = reTweets;
 	}
 

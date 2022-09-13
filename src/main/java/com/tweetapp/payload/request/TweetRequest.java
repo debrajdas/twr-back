@@ -6,7 +6,6 @@ public class TweetRequest {
 
 	private String id;
 
-	@Size(max = 144)
 	private String tweetString;
 
 	private String username;
