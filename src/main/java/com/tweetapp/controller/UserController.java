@@ -30,4 +30,10 @@ public class UserController {
 	public ResponseEntity<?> searchByUsername(@PathVariable String username) {
 		return ResponseEntity.ok(usersfacade.searchByUsername(username));
 	}
+	@GetMapping(path="test")
+	public String test()
+	{
+		return "its running";
+	}
+	  
 }
