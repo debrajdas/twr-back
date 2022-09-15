@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tweetapp.facade.UsersFacade;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://ec2-18-212-55-150.compute-1.amazonaws.com:3000")
 @RestController
 @RequestMapping("/")
 public class UserController {

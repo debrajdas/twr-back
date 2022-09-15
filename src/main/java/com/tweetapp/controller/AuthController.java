@@ -38,7 +38,7 @@ import com.tweetapp.security.services.UserDetailsImpl;
 import com.tweetapp.util.TweetAppConstants;
 import com.tweetapp.util.TweetAppUtil;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://ec2-18-212-55-150.compute-1.amazonaws.com:3000")
 @RestController
 @RequestMapping("/")
 public class AuthController {
