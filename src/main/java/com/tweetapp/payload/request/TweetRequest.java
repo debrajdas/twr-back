@@ -52,4 +52,12 @@ public class TweetRequest {
 		this.username = username;
 	}
 
+	public TweetRequest(String id, String tweetString, String username) {
+		super();
+		this.id = id;
+		this.tweetString = tweetString;
+		this.username = username;
+	}
+	
+
 }

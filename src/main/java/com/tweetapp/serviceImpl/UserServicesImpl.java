@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.tweetapp.dao.UsersDao;
 import com.tweetapp.domain.Users;
+import com.tweetapp.exception.UserNotFoundException;
 import com.tweetapp.payload.response.UsersResponse;
 import com.tweetapp.payload.response.UsersResponseList;
 import com.tweetapp.service.UserServices;
@@ -25,37 +26,51 @@ public class UserServicesImpl implements UserServices {
 
 	@Override
 	public UsersResponseList getAllUsers() {
-		List<Users> users = userDao.getAllUsers();
-		System.out.println(users.size());
-		for(Users u:users) System.out.println(u.getUsername());
-		UsersResponseList usersResponseList = new UsersResponseList();
-		List<UsersResponse> usersResponses = new ArrayList<>();
-		users.forEach(user -> {
-			UsersResponse usersResponse = new UsersResponse();
-			usersResponse.setId(user.getId());
-			usersResponse.setName(user.getFirstName() + " " + user.getLastName());
-			usersResponse.setUsername(user.getUsername());
-			usersResponses.add(usersResponse);
+		try {
+			List<Users> users = userDao.getAllUsers();
+			System.out.println(users.size());
+			for(Users u:users) System.out.println(u.getUsername());
+			UsersResponseList usersResponseList = new UsersResponseList();
+			List<UsersResponse> usersResponses = new ArrayList<>();
+			users.forEach(user -> {
+				UsersResponse usersResponse = new UsersResponse();
+				usersResponse.setId(user.getId());
+				usersResponse.setName(user.getFirstName() + " " + user.getLastName());
+				usersResponse.setUsername(user.getUsername());
+				usersResponses.add(usersResponse);
+				
+			});
+			usersResponseList.setUsersList(usersResponses);
+			return usersResponseList;
 			
-		});
-		usersResponseList.setUsersList(usersResponses);
-		return usersResponseList;
+		}
+		catch(Exception e)
+		{
+			throw new UserNotFoundException("user not found");
+		}
+		
 	}
 
 	@Override
 	public UsersResponseList searchByUsername(String username) {
-		List<Users> users = userDao.searchByUsername(username);
-		UsersResponseList usersResponseList = new UsersResponseList();
-		List<UsersResponse> usersResponses = new ArrayList<>();
-		users.forEach(user -> {
-			UsersResponse usersResponse = new UsersResponse();
-			usersResponse.setId(user.getId());
-			usersResponse.setName(user.getFirstName() + " " + user.getLastName());
-			usersResponse.setUsername(user.getUsername());
-			usersResponses.add(usersResponse);
-		});
-		usersResponseList.setUsersList(usersResponses);
-		return usersResponseList;
+		try {
+			List<Users> users = userDao.searchByUsername(username);
+			UsersResponseList usersResponseList = new UsersResponseList();
+			List<UsersResponse> usersResponses = new ArrayList<>();
+			users.forEach(user -> {
+				UsersResponse usersResponse = new UsersResponse();
+				usersResponse.setId(user.getId());
+				usersResponse.setName(user.getFirstName() + " " + user.getLastName());
+				usersResponse.setUsername(user.getUsername());
+				usersResponses.add(usersResponse);
+			});
+			usersResponseList.setUsersList(usersResponses);
+			return usersResponseList;
+		}
+		catch(Exception e)
+		{
+			throw new UserNotFoundException("user not found");
+		}
 	}
 
 }

@@ -19,6 +19,7 @@ import com.tweetapp.domain.Comments;
 import com.tweetapp.domain.Likes;
 import com.tweetapp.domain.Tweets;
 import com.tweetapp.domain.Users;
+import com.tweetapp.exception.TweetNotFoundException;
 import com.tweetapp.payload.request.TweetRequest;
 import com.tweetapp.payload.response.TweetResponse;
 import com.tweetapp.payload.response.CommentResponse;
@@ -49,7 +50,7 @@ public class TweetServicesImpl implements TweetServices {
 	CommentRepository commentRepo;
 
 	@Override
-	public void createTweet(TweetRequest tweetRequest) {
+	public void createTweet (TweetRequest tweetRequest) throws TweetNotFoundException{
 		LOG.info("inside createTweet()");
 		Users user = usersDao.getUserByUsername(tweetRequest.getUsername());
 		Tweets tweet = new Tweets(tweetRequest.getTweetString(), user);
@@ -65,7 +66,7 @@ public class TweetServicesImpl implements TweetServices {
 	}
 
 	@Override
-	public void updateTweet(TweetRequest tweetRequest) {
+	public void updateTweet(TweetRequest tweetRequest)throws TweetNotFoundException {
 		LOG.info("inside updateTweet()");
 		Tweets tweet = tweetsDao.findTweetById(tweetRequest.getId());
 		Users users = usersDao.getUserByUsername(tweetRequest.getUsername());
@@ -78,9 +79,9 @@ public class TweetServicesImpl implements TweetServices {
 			tweetsDao.save(tweet);
 		}
 	}
-
+	
 	@Override
-	public TweetResponseList getAllTweets() {
+	public TweetResponseList getAllTweets() throws TweetNotFoundException {
 	
 		List<Tweets> allTweets = tweetsDao.getAllTweets();
 		Collections.reverse(allTweets);
@@ -143,7 +144,7 @@ public class TweetServicesImpl implements TweetServices {
 	}
 
 	@Override
-	public Boolean deleteTweet(String username, String id) {
+	public Boolean deleteTweet (String username, String id) throws TweetNotFoundException {
 		Tweets tweet = tweetsDao.findTweetById(id);
 		if (tweet.getUsername().getUsername().equals(username) || usersDao.isUserAdmin(username)) {
 			tweetsDao.delete(id);
@@ -153,7 +154,7 @@ public class TweetServicesImpl implements TweetServices {
 	}
 
 	@Override
-	public Boolean likeTweet(String username, String id) {
+	public Boolean likeTweet(String username, String id)throws TweetNotFoundException {
 		Tweets tweet = tweetsDao.findTweetById(id);
 		Likes like = null;
 		if (!tweet.getLikes().isEmpty()) {
@@ -200,7 +201,7 @@ public class TweetServicesImpl implements TweetServices {
 	}
 
 	@Override
-	public TweetResponseList getAllTweetsByUsername(String username) {
+	public TweetResponseList getAllTweetsByUsername(String username) throws TweetNotFoundException{
 		Users user = usersDao.getUserByUsername(username);
 		TweetResponseList tweetList = new TweetResponseList();
 		List<TweetResponse> tweets = new ArrayList<>();
@@ -262,7 +263,7 @@ public class TweetServicesImpl implements TweetServices {
 	}
 
 	@Override
-	public void replyToTweet(TweetRequest tweetRequest, String tweetId) {
+	public void replyToTweet (TweetRequest tweetRequest, String tweetId) throws TweetNotFoundException{
 		LOG.info("inside replyToTweet()");
 		Users user = usersDao.getUserByUsername(tweetRequest.getUsername());
 		Tweets tweet = tweetsDao.findTweetById(tweetId);

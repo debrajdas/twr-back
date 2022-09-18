@@ -27,6 +27,7 @@ import com.tweetapp.dao.UsersDao;
 import com.tweetapp.domain.ERole;
 import com.tweetapp.domain.Role;
 import com.tweetapp.domain.Users;
+import com.tweetapp.exception.ResourceNotFoundException;
 import com.tweetapp.payload.request.LoginRequest;
 import com.tweetapp.payload.request.SignupRequest;
 import com.tweetapp.payload.response.JwtResponse;
@@ -62,18 +63,31 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws ResourceNotFoundException {
+		try {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		
+		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-		return ResponseEntity.ok(
-				new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+		
+		
+			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+					.collect(Collectors.toList());
+			return ResponseEntity.ok(
+					new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+		}
+	catch(Exception e)
+	{
+		throw new ResourceNotFoundException("aceess denied");
+	   
 	}
+		}
+	
+	
 
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
